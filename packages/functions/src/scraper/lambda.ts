@@ -27,35 +27,37 @@ export const handler = ApiHandler(async (_evt) => {
 
   console.log(`fetched a list of ${pokemonList.length} pokémons`);
 
-  const firstPokemon = pokemonList[0];
+  const first10Pokemon = pokemonList.slice(0, 10);
 
-  console.log(`fetching ${firstPokemon.name} from ${firstPokemon.url}`);
+  for (const pokemon of first10Pokemon) {
+    console.log(`fetching ${pokemon.name} from ${pokemon.url}`);
 
-  const $ = await chromiumScraper(firstPokemon.url);
+    const $ = await chromiumScraper(pokemon.url);
 
-  const pokemonName = $("main h1").text();
+    const pokemonName = $("main h1").text();
 
-  const pokemonTabIndex = $(
-    "main div.tabset-basics div.sv-tabs-tab-list a.sv-tabs-tab.active"
-  ).attr("href");
+    const pokemonTabIndex = $(
+      "main div.tabset-basics div.sv-tabs-tab-list a.sv-tabs-tab.active"
+    ).attr("href");
 
-  const pokemonPokedexData = $(
-    `main div.tabset-basics div.sv-tabs-panel-list div${pokemonTabIndex} table.vitals-table:first-of-type tbody`
-  );
-  const pokemonId = pokemonPokedexData
-    .find("tr:first-of-type td strong")
-    .text();
+    const pokemonPokedexData = $(
+      `main div.tabset-basics div.sv-tabs-panel-list div${pokemonTabIndex} table.vitals-table:first-of-type tbody`
+    );
+    const pokemonId = pokemonPokedexData
+      .find("tr:first-of-type td strong")
+      .text();
 
-  const pokemonTypes = pokemonPokedexData
-    .find("tr:nth-of-type(2) td a.type-icon")
-    .map(function () {
-      return $(this).text();
-    })
-    .get();
+    const pokemonTypes = pokemonPokedexData
+      .find("tr:nth-of-type(2) td a.type-icon")
+      .map(function () {
+        return $(this).text();
+      })
+      .get();
 
-  console.log(
-    `fetched ${pokemonName} with id ${pokemonId} and types ${pokemonTypes}`
-  );
+    console.log(
+      `fetched ${pokemonName} with id ${pokemonId} and types ${pokemonTypes}`
+    );
+  }
 
   return {
     statusCode: 200,
