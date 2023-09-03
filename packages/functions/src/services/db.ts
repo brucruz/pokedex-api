@@ -36,10 +36,25 @@ export async function createPokemons(pokemons: Database["pokemons"][]) {
   return result;
 }
 
-export async function getPokemons() {
-  const pokemons = await db.selectFrom("pokemons").selectAll().execute();
+export async function getPokemons(limit: number = 50, offset: number = 0) {
+  const pokemons = await db
+    .selectFrom("pokemons")
+    .selectAll()
+    .limit(limit)
+    .offset(offset)
+    .execute();
 
   return pokemons;
+}
+
+export async function countAllPokemons() {
+  return (
+    db
+      .selectFrom("pokemons")
+      // .select(sql`count(*)`)
+      .select((eb) => eb.fn.count<number>("id").as("count"))
+      .executeTakeFirstOrThrow()
+  );
 }
 
 export async function getPokemonByName(name: string) {
