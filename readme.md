@@ -49,12 +49,12 @@ Once you enter the name, the SST framework will deploy the API to your AWS accou
 
 ## Endpoints
 
-A live production version of this API is available at [https://ucbyh1kpqf.execute-api.us-east-1.amazonaws.com](https://ucbyh1kpqf.execute-api.us-east-1.amazonaws.com).
+A live production version of this API is being hosted at AWS and is available at [https://ucbyh1kpqf.execute-api.us-east-1.amazonaws.com](https://ucbyh1kpqf.execute-api.us-east-1.amazonaws.com).
 
-- `GET /pokemon/all`: Returns a list of all pokemons.
+- `GET /pokemon/all`: Returns a list of all pokemons. This endpoint is paginated and you can pass the `limit` and `offset` query parameters to get the next page of results.
 - `GET /pokemon/<name>`: Returns the information of a pokemon given its name.
 - `GET /pokemon/id/<id>`: Returns the information of a pokemon given its id.
-- `GET /scraper`: Scrapes the [PokemonDb](https://pokemondb.net/pokedex/national) and returns a list of the first 50 pokemons.
+- `GET /scraper`: Scrapes the [PokemonDb](https://pokemondb.net/pokedex/national) and returns a list of its pokemons.
 
 ## Improvements to be made
 
