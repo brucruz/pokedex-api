@@ -13,9 +13,9 @@ export function API({ stack }: StackContext) {
 
   const api = new Api(stack, "api", {
     routes: {
-      "GET /scraper": {
+      "GET /scrape": {
         function: {
-          handler: "packages/functions/src/lambda.handler",
+          handler: "packages/functions/src/scraper/lambda.handler",
           layers: [chromwAwsLayer],
         },
       },
