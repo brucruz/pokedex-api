@@ -1,6 +1,7 @@
 import { SQSEvent } from "aws-lambda";
 import { PokemonFromIndexPage } from "./lambda";
 import { chromiumScraper } from "src/services/chromiumScraper";
+import { createPokemons } from "src/services/db";
 
 export async function handler(event: SQSEvent) {
   const records = event.Records;
@@ -45,5 +46,11 @@ export async function handler(event: SQSEvent) {
       id: pokemonId,
       types: pokemonTypes,
     });
+  }
+
+  try {
+    await createPokemons(fetchedPokemons);
+  } catch (error) {
+    console.log(error);
   }
 }

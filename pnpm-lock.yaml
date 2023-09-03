@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      kysely:
+        specifier: ^0.26.3
+        version: 0.26.3
     devDependencies:
       '@tsconfig/node16':
         specifier: ^16.1.1
@@ -42,6 +46,9 @@ importers:
 
   packages/functions:
     dependencies:
+      '@aws-sdk/client-rds-data':
+        specifier: ^3.405.0
+        version: 3.405.0
       '@aws-sdk/client-sqs':
         specifier: ^3.405.0
         version: 3.405.0
@@ -51,6 +58,12 @@ importers:
       cheerio:
         specifier: 1.0.0-rc.12
         version: 1.0.0-rc.12
+      kysely:
+        specifier: ^0.26.3
+        version: 0.26.3
+      kysely-data-api:
+        specifier: ^0.2.1
+        version: 0.2.1(@aws-sdk/client-rds-data@3.405.0)(kysely@0.26.3)
       node-fetch:
         specifier: ^3.3.2
         version: 3.3.2
@@ -669,7 +682,6 @@ packages:
       tslib: 2.6.2
     transitivePeerDependencies:
       - aws-crt
-    dev: true
 
   /@aws-sdk/client-s3@3.405.0(@aws-sdk/signature-v4-crt@3.398.0):
     resolution: {integrity: sha512-+LK6OCbKplR51zBZAtK/+RxaPsXcEklsA1+mmUA3M1h4KHl6GMiK5r/D9dlKht5DRntmmjCn3SI99QbfckqKXg==}
@@ -4555,10 +4567,25 @@ packages:
       kysely: 0.25.0
     dev: true
 
+  /kysely-data-api@0.2.1(@aws-sdk/client-rds-data@3.405.0)(kysely@0.26.3):
+    resolution: {integrity: sha512-KmASvF1gmjVqyU9WOUXhCQlv29ofR+xc2DhjaIomz1+Bjd/VtR2/3g4ZuXwG1L4lWGKxMuo5iOvK3XyPbB4LdQ==}
+    peerDependencies:
+      '@aws-sdk/client-rds-data': 3.x
+      kysely: 0.x
+    dependencies:
+      '@aws-sdk/client-rds-data': 3.405.0
+      kysely: 0.26.3
+    dev: false
+
   /kysely@0.25.0:
     resolution: {integrity: sha512-srn0efIMu5IoEBk0tBmtGnoUss4uwvxtbFQWG/U2MosfqIace1l43IFP1PmEpHRDp+Z79xIcKEqmHH3dAvQdQA==}
     engines: {node: '>=14.0.0'}
     dev: true
+
+  /kysely@0.26.3:
+    resolution: {integrity: sha512-yWSgGi9bY13b/W06DD2OCDDHQmq1kwTGYlQ4wpZkMOJqMGCstVCFIvxCCVG4KfY1/3G0MhDAcZsip/Lw8/vJWw==}
+    engines: {node: '>=14.0.0'}
+    dev: false
 
   /lazystream@1.0.1:
     resolution: {integrity: sha512-b94GiNHQNy6JNTrt5w6zNyffMrNkXZb3KTkCZJb2V1xaEGCk093vkZ2jk3tpaeP33/OiXC+WvK9AxUebnf5nbw==}
