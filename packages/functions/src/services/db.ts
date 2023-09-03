@@ -35,3 +35,9 @@ export async function createPokemons(pokemons: Database["pokemons"][]) {
 
   return result;
 }
+
+export async function getPokemons() {
+  const pokemons = await db.selectFrom("pokemons").selectAll().execute();
+
+  return pokemons;
+}

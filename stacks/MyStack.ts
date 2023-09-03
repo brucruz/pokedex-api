@@ -38,7 +38,7 @@ export function API({ stack }: StackContext) {
   const api = new Api(stack, "api", {
     defaults: {
       function: {
-        bind: [queue],
+        bind: [queue, database],
       },
     },
     routes: {
@@ -48,6 +48,7 @@ export function API({ stack }: StackContext) {
           layers: [chromwAwsLayer],
         },
       },
+      "GET /pokemon/all": "packages/functions/src/pokemon/listAll.handler",
     },
   });
 
