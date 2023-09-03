@@ -1,4 +1,4 @@
-import { StackContext, Api, Queue } from "sst/constructs";
+import { StackContext, Api, Queue, RDS } from "sst/constructs";
 import { LayerVersion } from "aws-cdk-lib/aws-lambda";
 
 const chromeAwsLayerArn =
@@ -11,10 +11,19 @@ export function API({ stack }: StackContext) {
     chromeAwsLayerArn
   );
 
+  const databaseName = "Pokedex";
+
+  const database = new RDS(stack, "database", {
+    engine: "postgresql13.9",
+    defaultDatabaseName: databaseName,
+    migrations: "services/migrations",
+  });
+
   const queue = new Queue(stack, "queue", {
     consumer: {
       function: {
         handler: "packages/functions/src/scraper/actor.handler",
+        bind: [database],
         layers: [chromwAwsLayer],
         timeout: 30,
       },
@@ -44,5 +53,9 @@ export function API({ stack }: StackContext) {
 
   stack.addOutputs({
     ApiEndpoint: api.url,
+    QueueUrl: queue.queueUrl,
+    DatabaseName: database.defaultDatabaseName,
+    DatabaseSecretArn: database.secretArn,
+    DatabaseIdentifier: database.clusterIdentifier,
   });
 }
