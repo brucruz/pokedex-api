@@ -51,6 +51,8 @@ export function API({ stack }: StackContext) {
       "GET /pokemon/all": "packages/functions/src/pokemon/listAll.handler",
       "GET /pokemon/{name}":
         "packages/functions/src/pokemon/fetchByName.handler",
+      "GET /pokemon/id/{id}":
+        "packages/functions/src/pokemon/fetchById.handler",
     },
   });
 
