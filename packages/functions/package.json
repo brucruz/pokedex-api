@@ -7,9 +7,12 @@
     "typecheck": "tsc -noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.5.9",
     "@types/aws-lambda": "^8.10.119",
-    "vitest": "^0.34.3",
-    "sst": "^2.24.23"
+    "@types/node": "^20.5.9",
+    "sst": "^2.24.23",
+    "vitest": "^0.34.3"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "112.0.2"
   }
 }
