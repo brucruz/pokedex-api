@@ -41,3 +41,13 @@ export async function getPokemons() {
 
   return pokemons;
 }
+
+export async function getPokemonByName(name: string) {
+  const pokemon = await db
+    .selectFrom("pokemons")
+    .selectAll()
+    .where("name", "=", name)
+    .executeTakeFirstOrThrow();
+
+  return pokemon;
+}
