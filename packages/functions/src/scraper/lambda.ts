@@ -6,6 +6,7 @@ import {
   SendMessageBatchCommandInput,
 } from "@aws-sdk/client-sqs";
 import { Queue } from "sst/node/queue";
+import { chunkArray } from "src/util/chunk-array";
 
 export interface PokemonFromIndexPage {
   name: string;
@@ -35,18 +36,37 @@ export const handler = ApiHandler(async (_evt) => {
 
   console.log(`fetched a list of ${pokemonList.length} pokémons`);
 
-  const first10Pokemon = pokemonList.slice(0, 10);
+  const first50Pokemon = pokemonList.slice(0, 50);
 
-  const input: SendMessageBatchCommandInput = {
-    QueueUrl: Queue.queue.queueUrl,
-    Entries: first10Pokemon.map((pokemon, index) => ({
-      Id: index.toString(),
-      MessageBody: JSON.stringify(pokemon),
-    })),
-  };
+  const chunks = chunkArray(first50Pokemon, 5);
 
-  const command = new SendMessageBatchCommand(input);
-  await sqs.send(command);
+  const commands: SendMessageBatchCommand[] = [];
+
+  for (const chunk of chunks) {
+    const input: SendMessageBatchCommandInput = {
+      QueueUrl: Queue.queue.queueUrl,
+      Entries: chunk.map((pokemon, index) => ({
+        Id: index.toString(),
+        MessageBody: JSON.stringify(pokemon),
+      })),
+    };
+    const command = new SendMessageBatchCommand(input);
+    commands.push(command);
+  }
+
+  try {
+    await Promise.all(commands.map((command) => sqs.send(command)));
+  } catch (err: any) {
+    console.log(
+      JSON.stringify({
+        QueueUrl: Queue.queue.queueUrl,
+        error: 1,
+        errorName: err.name,
+        erroMessage: err.message,
+        errorStack: err.stack,
+      })
+    );
+  }
 
   return {
     statusCode: 200,
