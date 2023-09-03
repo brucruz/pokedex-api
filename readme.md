@@ -49,7 +49,7 @@ Once you enter the name, the SST framework will deploy the API to your AWS accou
 
 ## Endpoints
 
-A live production version of this API is available at []().
+A live production version of this API is available at [https://ucbyh1kpqf.execute-api.us-east-1.amazonaws.com](https://ucbyh1kpqf.execute-api.us-east-1.amazonaws.com).
 
 - `GET /pokemon/all`: Returns a list of all pokemons.
 - `GET /pokemon/<name>`: Returns the information of a pokemon given its name.
@@ -60,9 +60,8 @@ A live production version of this API is available at []().
 
 This API is still under development and there are some improvements to be made:
 
-- [x] Add pagination to the `/pokemon/all` endpoint.
-- [ ] Add a `/pokemon/type/<type>` endpoint to get all pokemons of a given type.
-- [ ] Fetch more information from each Pokémon.
-- [ ] Create a fallback for when the database doesn't find a pokémon, to try to scrape it from the [PokemonDb](https://pokemondb.net/pokedex/national) before returning an error.
-- [ ] Add better error handling.
+- [x] Add pagination to the `/pokemon/all` endpoint
+- [ ] Add a `/pokemon/type/<type>` endpoint to get all pokemons of a given type
+- [ ] Fetch more information from each Pokémon
+- [ ] Add better error handling
 - [ ] Add more descriptive return logs to improve developer experience in searching logs in Cloudwatch
