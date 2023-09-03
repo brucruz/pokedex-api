@@ -27,6 +27,36 @@ export const handler = ApiHandler(async (_evt) => {
 
   console.log(`fetched a list of ${pokemonList.length} pokémons`);
 
+  const firstPokemon = pokemonList[0];
+
+  console.log(`fetching ${firstPokemon.name} from ${firstPokemon.url}`);
+
+  const $ = await chromiumScraper(firstPokemon.url);
+
+  const pokemonName = $("main h1").text();
+
+  const pokemonTabIndex = $(
+    "main div.tabset-basics div.sv-tabs-tab-list a.sv-tabs-tab.active"
+  ).attr("href");
+
+  const pokemonPokedexData = $(
+    `main div.tabset-basics div.sv-tabs-panel-list div${pokemonTabIndex} table.vitals-table:first-of-type tbody`
+  );
+  const pokemonId = pokemonPokedexData
+    .find("tr:first-of-type td strong")
+    .text();
+
+  const pokemonTypes = pokemonPokedexData
+    .find("tr:nth-of-type(2) td a.type-icon")
+    .map(function () {
+      return $(this).text();
+    })
+    .get();
+
+  console.log(
+    `fetched ${pokemonName} with id ${pokemonId} and types ${pokemonTypes}`
+  );
+
   return {
     statusCode: 200,
     body: `We found ${pokemonList.length} pokémons`,
