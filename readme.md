@@ -46,3 +46,23 @@ Once you enter the name, the SST framework will deploy the API to your AWS accou
 
 ✔  Built
 ```
+
+## Endpoints
+
+A live production version of this API is available at []().
+
+- `GET /pokemon/all`: Returns a list of all pokemons.
+- `GET /pokemon/<name>`: Returns the information of a pokemon given its name.
+- `GET /pokemon/id/<id>`: Returns the information of a pokemon given its id.
+- `GET /scraper`: Scrapes the [PokemonDb](https://pokemondb.net/pokedex/national) and returns a list of the first 50 pokemons.
+
+## Improvements to be made
+
+This API is still under development and there are some improvements to be made:
+
+- [x] Add pagination to the `/pokemon/all` endpoint.
+- [ ] Add a `/pokemon/type/<type>` endpoint to get all pokemons of a given type.
+- [ ] Fetch more information from each Pokémon.
+- [ ] Create a fallback for when the database doesn't find a pokémon, to try to scrape it from the [PokemonDb](https://pokemondb.net/pokedex/national) before returning an error.
+- [ ] Add better error handling.
+- [ ] Add more descriptive return logs to improve developer experience in searching logs in Cloudwatch
