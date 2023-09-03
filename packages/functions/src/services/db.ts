@@ -42,6 +42,7 @@ export async function getPokemons(limit: number = 50, offset: number = 0) {
     .selectAll()
     .limit(limit)
     .offset(offset)
+    .orderBy("id", "asc")
     .execute();
 
   return pokemons;

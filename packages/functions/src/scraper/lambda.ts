@@ -36,9 +36,7 @@ export const handler = ApiHandler(async (_evt) => {
 
   console.log(`fetched a list of ${pokemonList.length} pokémons`);
 
-  const first50Pokemon = pokemonList.slice(0, 50);
-
-  const chunks = chunkArray(first50Pokemon, 5);
+  const chunks = chunkArray(pokemonList, 5);
 
   const commands: SendMessageBatchCommand[] = [];
 
