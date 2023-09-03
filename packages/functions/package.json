@@ -13,6 +13,7 @@
     "vitest": "^0.34.3"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.405.0",
     "@sparticuz/chromium": "112.0.2",
     "cheerio": "1.0.0-rc.12",
     "node-fetch": "^3.3.2",

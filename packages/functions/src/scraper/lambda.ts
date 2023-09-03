@@ -1,10 +1,18 @@
 import { chromiumScraper } from "src/services/chromiumScraper";
 import { ApiHandler } from "sst/node/api";
+import {
+  SQSClient,
+  SendMessageBatchCommand,
+  SendMessageBatchCommandInput,
+} from "@aws-sdk/client-sqs";
+import { Queue } from "sst/node/queue";
 
 export interface PokemonFromIndexPage {
   name: string;
   url: string;
 }
+
+const sqs = new SQSClient({ region: "us-east-1" });
 
 export const handler = ApiHandler(async (_evt) => {
   const rootUrl = "https://pokemondb.net";
@@ -29,35 +37,16 @@ export const handler = ApiHandler(async (_evt) => {
 
   const first10Pokemon = pokemonList.slice(0, 10);
 
-  for (const pokemon of first10Pokemon) {
-    console.log(`fetching ${pokemon.name} from ${pokemon.url}`);
+  const input: SendMessageBatchCommandInput = {
+    QueueUrl: Queue.queue.queueUrl,
+    Entries: first10Pokemon.map((pokemon, index) => ({
+      Id: index.toString(),
+      MessageBody: JSON.stringify(pokemon),
+    })),
+  };
 
-    const $ = await chromiumScraper(pokemon.url);
-
-    const pokemonName = $("main h1").text();
-
-    const pokemonTabIndex = $(
-      "main div.tabset-basics div.sv-tabs-tab-list a.sv-tabs-tab.active"
-    ).attr("href");
-
-    const pokemonPokedexData = $(
-      `main div.tabset-basics div.sv-tabs-panel-list div${pokemonTabIndex} table.vitals-table:first-of-type tbody`
-    );
-    const pokemonId = pokemonPokedexData
-      .find("tr:first-of-type td strong")
-      .text();
-
-    const pokemonTypes = pokemonPokedexData
-      .find("tr:nth-of-type(2) td a.type-icon")
-      .map(function () {
-        return $(this).text();
-      })
-      .get();
-
-    console.log(
-      `fetched ${pokemonName} with id ${pokemonId} and types ${pokemonTypes}`
-    );
-  }
+  const command = new SendMessageBatchCommand(input);
+  await sqs.send(command);
 
   return {
     statusCode: 200,

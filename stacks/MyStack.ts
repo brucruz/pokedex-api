@@ -1,4 +1,4 @@
-import { StackContext, Api } from "sst/constructs";
+import { StackContext, Api, Queue } from "sst/constructs";
 import { LayerVersion } from "aws-cdk-lib/aws-lambda";
 
 const chromeAwsLayerArn =
@@ -11,7 +11,27 @@ export function API({ stack }: StackContext) {
     chromeAwsLayerArn
   );
 
+  const queue = new Queue(stack, "queue", {
+    consumer: {
+      function: {
+        handler: "packages/functions/src/scraper/actor.handler",
+        layers: [chromwAwsLayer],
+        timeout: 30,
+      },
+      cdk: {
+        eventSource: {
+          maxConcurrency: 5,
+        },
+      },
+    },
+  });
+
   const api = new Api(stack, "api", {
+    defaults: {
+      function: {
+        bind: [queue],
+      },
+    },
     routes: {
       "GET /scrape": {
         function: {
